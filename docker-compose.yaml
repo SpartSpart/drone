@@ -19,7 +19,7 @@ services:
     restart: unless-stopped
   drone-db:
     container_name: drone-db
-    image: 'postgres:latest'
+    image: 'postgres'
     ports:
       - "${DB_PORT}:5432"
     environment:
@@ -27,3 +27,8 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
     restart: unless-stopped
+#
+#networks:
+#  network1:
+#    name: my-pre-existing-network
+#    external: true
