@@ -1,0 +1,29 @@
+version: "1"
+
+services:
+  example-app:
+    container_name: drone-app
+    depends_on:
+      -   drone-db
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    build:
+      context: .
+    environment:
+      DB_USERNAME: ${DB_USERNAME:?dbUserNameNorProvided}
+      DB_PASSWORD: ${DB_PASSWORD:?dbPasswordNotProvided}
+      DB_NAME: ${DB_NAME:?dbNameNotProvided}
+      DB_HOST: drone-db
+      DB_PORT: 5437
+      APP_PORT: ${APP_PORT:?appPortNotProvided}
+    restart: unless-stopped
+  example-db:
+    container_name: drone-db
+    image: 'postgres:latest'
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    restart: unless-stopped
