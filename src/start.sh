@@ -1,7 +1,3 @@
- скрипт. Посмотрим на него:
-
-#!/bin/bash
-
 # Pull new changes
 git pull
 

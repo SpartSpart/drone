@@ -1,7 +1,7 @@
-version: "1"
+version: "3.9"
 
 services:
-  example-app:
+  drone-app:
     container_name: drone-app
     depends_on:
       -   drone-db
@@ -17,7 +17,7 @@ services:
       DB_PORT: 5437
       APP_PORT: ${APP_PORT:?appPortNotProvided}
     restart: unless-stopped
-  example-db:
+  drone-db:
     container_name: drone-db
     image: 'postgres:latest'
     ports:
