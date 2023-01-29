@@ -15,6 +15,9 @@ public class DroneEntity {
     @Column(name = "ID", nullable = false)
     private Long id;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "serial_number")
     private String serialNumber;
 
@@ -31,5 +34,9 @@ public class DroneEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "state", nullable = false)
     private StateEntity state;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "medication")
+    private StateEntity medication;
 
 }

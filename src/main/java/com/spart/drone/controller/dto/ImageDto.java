@@ -9,11 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DroneDto {
-    private Long id;
-    private String serialNumber;
-    private ModelDto model;
-    private int weight;
-    private int batteryСapacity;
-    private StateDto state;
+public class ImageDto {
+
+    private byte[] image;
 }

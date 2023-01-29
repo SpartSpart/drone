@@ -16,6 +16,6 @@ public class ModelEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "model")
-    private String model;
+    @Column(name = "name",unique = true)
+    private String name;
 }

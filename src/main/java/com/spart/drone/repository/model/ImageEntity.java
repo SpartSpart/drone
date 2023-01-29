@@ -5,16 +5,17 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "state",schema = "public")
 @Getter
 @Setter
-public class StateEntity {
+@Entity
+@Table (name = "image",schema = "public")
+public class ImageEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name",unique = true)
-    private String name;
+    @Column(name = "image")
+    private byte[] image;
 }
