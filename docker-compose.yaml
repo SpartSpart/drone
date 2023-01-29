@@ -3,10 +3,12 @@ version: "3.9"
 services:
   drone-app:
     container_name: drone-app
+    networks:
+      - network1
     depends_on:
       -   drone-db
     ports:
-      - "${APP_PORT}:${APP_PORT}"
+      - "${APP_PORT}:8081"
     build:
       context: .
     environment:
@@ -14,12 +16,16 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:?dbPasswordNotProvided}
       DB_NAME: ${DB_NAME:?dbNameNotProvided}
       DB_HOST: drone-db
-      DB_PORT: 5437
-      APP_PORT: ${APP_PORT:?appPortNotProvided}
+      DB_PORT: 5432
+      APP_PORT: 8081
     restart: unless-stopped
   drone-db:
     container_name: drone-db
+    networks:
+      - network1
     image: 'postgres'
+    expose:
+      - 5439
     ports:
       - "${DB_PORT}:5432"
     environment:
@@ -27,8 +33,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
     restart: unless-stopped
-#
-#networks:
-#  network1:
-#    name: my-pre-existing-network
-#    external: true
+
+networks:
+  network1:
+
