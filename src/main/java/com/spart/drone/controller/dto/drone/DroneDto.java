@@ -9,12 +9,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class DroneDto {
+
+    @NotNull
+    private Long id;
 
     @Size(max = 100)
     @NotNull
@@ -41,5 +45,5 @@ public class DroneDto {
     @NotNull
     private StateDto state;
 
-    private MedicationDto medicationDto;
+    private List<MedicationDto> medicationDto;
 }

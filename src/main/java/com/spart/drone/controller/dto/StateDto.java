@@ -15,6 +15,9 @@ import javax.validation.constraints.NotNull;
 public class StateDto {
 
     @NotNull
+    private Long id;
+
+    @NotNull
     @NotEmpty
     private String name;
 }

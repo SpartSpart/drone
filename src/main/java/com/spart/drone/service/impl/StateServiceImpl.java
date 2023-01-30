@@ -1,6 +1,6 @@
 package com.spart.drone.service.impl;
 
-import com.spart.drone.exception.NoSuchElementInDatabase;
+import com.spart.drone.exception.NoSuchElementInDatabaseException;
 import com.spart.drone.repository.StateRepository;
 import com.spart.drone.repository.model.StateEntity;
 import com.spart.drone.service.StateService;
@@ -19,7 +19,7 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public StateEntity getStateIdByName(String name) throws NoSuchElementInDatabase {
-        return Optional.ofNullable(stateRepository.findByName(name)).get().orElseThrow(NoSuchElementInDatabase::new);
+    public StateEntity getStateIdByName(String name)  {
+        return Optional.ofNullable(stateRepository.findByName(name)).get().orElseThrow(()->new NoSuchElementInDatabaseException(StateEntity.class.getName()));
     }
 }

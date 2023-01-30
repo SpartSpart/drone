@@ -1,7 +1,7 @@
 package com.spart.drone.service.impl;
 
 import com.spart.drone.controller.dto.ModelDto;
-import com.spart.drone.exception.NoSuchElementInDatabase;
+import com.spart.drone.exception.NoSuchElementInDatabaseException;
 import com.spart.drone.repository.model.ModelEntity;
 import com.spart.drone.repository.ModelRepository;
 import com.spart.drone.service.ModelService;
@@ -28,8 +28,8 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public ModelEntity getModelIdByName(String name) throws NoSuchElementInDatabase {
-        return Optional.ofNullable(modelRepository.findByName(name)).get().orElseThrow(NoSuchElementInDatabase::new);
+    public ModelEntity getModelIdByName(String name) throws NoSuchElementInDatabaseException {
+        return Optional.ofNullable(modelRepository.findByName(name)).get().orElseThrow(()-> new NoSuchElementInDatabaseException(ModelEntity.class.getName()));
     }
 
 }

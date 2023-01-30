@@ -34,11 +34,7 @@ create table drone
             references model,
     state            bigint not null
         constraint fk_drone_to_state
-            references state,
-    medication       bigint
-        constraint fk_drone_to_medication
             references state
-
 );
 
 alter table drone
@@ -70,3 +66,15 @@ create table medication
 
 alter table medication
     owner to drone;
+
+create table drone_medication
+(
+    id bigserial,
+    drone_id bigint,
+    medication_id bigint,
+    constraint drone_medication_pk primary key (id),
+    constraint fk_drone
+        foreign key(drone_id) references drone (id),
+    constraint fk_medication
+        foreign key(medication_id) references medication (id)
+);

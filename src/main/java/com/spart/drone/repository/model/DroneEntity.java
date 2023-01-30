@@ -2,13 +2,16 @@ package com.spart.drone.repository.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "drone",schema = "public")
 @Getter
 @Setter
+@ToString(exclude = "medicationEntitySet")
 public class DroneEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +38,15 @@ public class DroneEntity {
     @JoinColumn(name = "state", nullable = false)
     private StateEntity state;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "medication")
-    private StateEntity medication;
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "drone_medication",
+            joinColumns = { @JoinColumn(name = "drone_id") },
+            inverseJoinColumns = { @JoinColumn(name = "medication_id") }
+    )
+    List<MedicationEntity> medicationEntities;
 
+    public void addMedication(MedicationEntity medicationEntity){
+        medicationEntities.add(medicationEntity);
+    }
 }

@@ -16,6 +16,9 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class MedicationDto {
 
+    @NotNull
+    private Long id;
+
     @Pattern(regexp = "[A-Za-z0-9_-]+")
     @NotNull
     @NotEmpty

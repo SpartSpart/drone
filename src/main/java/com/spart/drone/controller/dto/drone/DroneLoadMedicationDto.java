@@ -16,6 +16,9 @@ import javax.validation.constraints.Size;
 @Setter
 public class DroneLoadMedicationDto {
 
+    @NotNull
+    private Long id;
+
     @Size(max = 100)
     @NotNull
     @NotEmpty

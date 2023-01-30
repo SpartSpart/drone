@@ -14,6 +14,9 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class ModelDto {
 
+    @NotNull
+    private Long id;
+
     @NotEmpty
     @NotNull
     private String name;
