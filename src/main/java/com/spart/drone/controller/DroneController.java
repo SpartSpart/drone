@@ -1,13 +1,12 @@
 package com.spart.drone.controller;
 
+import com.spart.drone.controller.dto.MedicationDto;
 import com.spart.drone.controller.dto.drone.DroneDto;
-import com.spart.drone.exception.DroneCountLimitException;
-import com.spart.drone.exception.NoSuchElementInDatabase;
 import com.spart.drone.service.DroneService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Drone controller allows manage drones
@@ -28,18 +27,30 @@ public class DroneController {
      * @return
      */
     @PostMapping
-    public ResponseEntity registerDrone(@RequestBody @Valid DroneDto droneDto){
-        try {
-            return ResponseEntity.ok().body(droneService.registerDrone(droneDto));
-        }
-        catch (NoSuchElementInDatabase|DroneCountLimitException|Exception exeption){
-            return ResponseEntity.ok().body(exeption.getMessage());
-        }
+    public Long registerDrone(@RequestBody @Valid DroneDto droneDto){
+        return droneService.registerDrone(droneDto);
     }
 
     @PostMapping("/load")
-    public ResponseEntity loadMedicationToDrone(@RequestParam(name = "droneId") Long droneId,
+    public void loadMedicationToDrone(@RequestParam(name = "droneId") Long droneId,
                                                 @RequestParam(name = "medicationId") Long medicationId){
-        return ResponseEntity.ok().build();
+            droneService.loadMedication(droneId, medicationId);
     }
+
+
+    @GetMapping
+    public List<DroneDto> getAllDrones(@RequestParam(name = "availableOnly", required = false, defaultValue = "false") Boolean availableOnly ){
+        return droneService.getAllDrones(availableOnly);
+    }
+
+    @GetMapping("{droneId}")
+    public List<MedicationDto> getDroneMedication(@PathVariable Long droneId){
+        return droneService.getDroneMedication(droneId);
+    }
+
+    @GetMapping("/empty")
+    public List<DroneDto> getDronesWithoutMedication(){
+        return droneService.getDronesWithoutMedication();
+    }
+
 }
