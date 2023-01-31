@@ -34,7 +34,7 @@ public class DroneEntity {
     @Column(name = "battery_capacity")
     private int batteryСapacity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "state", nullable = false)
     private StateEntity state;
 

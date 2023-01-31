@@ -1,11 +1,11 @@
 package com.spart.drone.exception;
 
-import java.util.function.Supplier;
+import com.spart.drone.service.validator.ValidationMessages;
 
 public class NoSuchElementInDatabaseException extends RuntimeException {
 
     public NoSuchElementInDatabaseException(String entityName) {
-        super("No element in Database, entity: " + entityName);
+        super(ValidationMessages.NO_SUCH_ELEMENT_IN_DB + entityName);
     }
 
 }

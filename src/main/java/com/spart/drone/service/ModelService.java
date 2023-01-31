@@ -10,4 +10,7 @@ public interface ModelService {
     Long saveModel(ModelDto modelDto);
 
     ModelEntity getModelIdByName(String name) throws NoSuchElementInDatabaseException;
+
+    ModelEntity getModelById(Long id);
+
 }

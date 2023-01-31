@@ -1,6 +1,6 @@
 package com.spart.drone.repository.mapper;
 
-import com.spart.drone.controller.dto.drone.DroneDto;
+import com.spart.drone.controller.dto.DroneDto;
 import com.spart.drone.repository.model.DroneEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

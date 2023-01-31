@@ -1,8 +1,9 @@
 package com.spart.drone.controller;
 
 import com.spart.drone.controller.dto.MedicationDto;
-import com.spart.drone.controller.dto.drone.DroneDto;
+import com.spart.drone.controller.dto.DroneDto;
 import com.spart.drone.service.DroneService;
+import com.spart.drone.service.status.Response;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,14 +28,14 @@ public class DroneController {
      * @return
      */
     @PostMapping
-    public Long registerDrone(@RequestBody @Valid DroneDto droneDto){
+    public Long addDrone(@RequestBody @Valid DroneDto droneDto){
         return droneService.registerDrone(droneDto);
     }
 
     @PostMapping("/load")
-    public void loadMedicationToDrone(@RequestParam(name = "droneId") Long droneId,
-                                                @RequestParam(name = "medicationId") Long medicationId){
-            droneService.loadMedication(droneId, medicationId);
+    public Response loadMedicationToDrone(@RequestParam(name = "droneId") Long droneId,
+                                          @RequestParam(name = "medicationId") Long medicationId){
+            return droneService.loadMedication(droneId, medicationId);
     }
 
 
@@ -52,5 +53,4 @@ public class DroneController {
     public List<DroneDto> getDronesWithoutMedication(){
         return droneService.getDronesWithoutMedication();
     }
-
-}
+ }

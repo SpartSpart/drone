@@ -1,8 +1,5 @@
-package com.spart.drone.controller.dto.drone;
+package com.spart.drone.controller.dto;
 
-import com.spart.drone.controller.dto.MedicationDto;
-import com.spart.drone.controller.dto.ModelDto;
-import com.spart.drone.controller.dto.StateDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +14,6 @@ import java.util.List;
 @Setter
 public class DroneDto {
 
-    @NotNull
     private Long id;
 
     @Size(max = 100)

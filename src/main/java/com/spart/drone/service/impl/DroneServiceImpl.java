@@ -1,9 +1,7 @@
 package com.spart.drone.service.impl;
 
 import com.spart.drone.controller.dto.MedicationDto;
-import com.spart.drone.controller.dto.drone.DroneDto;
-import com.spart.drone.exception.DroneCountLimitException;
-import com.spart.drone.exception.LoadWeightLimitException;
+import com.spart.drone.controller.dto.DroneDto;
 import com.spart.drone.exception.NoSuchElementInDatabaseException;
 import com.spart.drone.repository.DroneRepository;
 import com.spart.drone.repository.mapper.DroneMapper;
@@ -15,12 +13,16 @@ import com.spart.drone.service.DroneService;
 import com.spart.drone.service.MedicationService;
 import com.spart.drone.service.ModelService;
 import com.spart.drone.service.StateService;
+import com.spart.drone.service.helper.DroneState;
+import com.spart.drone.service.status.Code;
+import com.spart.drone.service.status.Response;
+import com.spart.drone.service.validator.DroneValidator;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 
 import org.springframework.context.annotation.Primary;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,12 +36,7 @@ public class DroneServiceImpl implements DroneService {
     private final StateService stateService;
     private final MedicationService medicationService;
     private final DroneMapper droneMapper;
-
-    private final ModelMapper modelMapper;
-
-    private final int MAX_VALUE_OF_DRONES_IN_SERVICE = 5;
-    private final String LIMIT_COUNT_DRONE_MESSAGE = "Number of drones in database already equals ";
-    private final Integer LOAD_WEIGHT_LIMIT = 500;
+    private final DroneValidator droneValidator;
 
     /**
      * @param droneRepository
@@ -47,22 +44,29 @@ public class DroneServiceImpl implements DroneService {
      * @param stateService
      * @param medicationService
      * @param droneMapper
-     * @param modelMapper     */
-    public DroneServiceImpl(DroneRepository droneRepository, ModelService modelService, StateService stateService, MedicationService medicationService, DroneMapper droneMapper, ModelMapper modelMapper) {
+     * @param droneValidator
+     **/
+    public DroneServiceImpl(DroneRepository droneRepository,
+                            ModelService modelService,
+                            StateService stateService,
+                            MedicationService medicationService,
+                            DroneMapper droneMapper,
+                            DroneValidator droneValidator) {
         this.droneRepository = droneRepository;
         this.modelService = modelService;
         this.stateService = stateService;
         this.medicationService = medicationService;
         this.droneMapper = droneMapper;
-
-        this.modelMapper = modelMapper;
+        this.droneValidator = droneValidator;
     }
 
     @Override
+    @Transactional
     public Long registerDrone(DroneDto droneDto) {
-        DroneEntity droneEntity = modelMapper.map(droneDto, DroneEntity.class);
 
-        checkNumberOfDrones();
+        DroneEntity droneEntity = droneMapper.toModel(droneDto); //modelMapper.map(droneDto, DroneEntity.class);
+
+        droneValidator.checkNumberOfDrones();
 
         ModelEntity modelEntity = modelService.getModelIdByName(droneDto.getModel().getName());
         StateEntity stateEntity = stateService.getStateIdByName(droneDto.getState().getName());
@@ -74,24 +78,32 @@ public class DroneServiceImpl implements DroneService {
     }
 
     @Override
-    public void loadMedication(Long droneId, Long medicationId)  {
+    @Transactional
+    public Response loadMedication(Long droneId, Long medicationId)  {
         MedicationEntity medicationEntity = medicationService.getMedicationById(medicationId);
         DroneEntity droneEntity = droneRepository.getDroneById(droneId).orElseThrow(()->new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
-        if (isAbleToLoad(droneEntity,medicationEntity)) {
+
+        Response response = droneValidator.isDroneValidForLoadingByMedication(droneEntity,medicationEntity);
+
+        if (response.getStatus().getCode().equals(Code.ok)){
+            changeDroneState(droneEntity, DroneState.LOADING);
+
             droneEntity.addMedication(medicationEntity);
             droneRepository.save(droneEntity);
+
+            changeDroneState(droneEntity, DroneState.LOADED);
         }
-        else
-            throw new LoadWeightLimitException(LOAD_WEIGHT_LIMIT - droneLoadedMedicationWeight(droneEntity));
+        return response;
     }
 
     @Override
+    @Transactional
     public List<DroneDto> getAllDrones(Boolean availableOnly) {
         List<DroneDto> droneDtoList = new ArrayList<>();
         List<DroneEntity> droneEntityList = droneRepository.findAll();
 
         if (availableOnly)
-            droneEntityList = droneEntityList.stream().filter(droneEntity -> isAbleToLoad(droneEntity))
+            droneEntityList = droneEntityList.stream().filter(droneEntity -> droneValidator.isDroneValidForLoading(droneEntity))
                     .collect(Collectors.toList());
 
         droneEntityList.stream().forEach(droneEntity -> {
@@ -103,6 +115,7 @@ public class DroneServiceImpl implements DroneService {
     }
 
     @Override
+    @Transactional
     public List<MedicationDto> getDroneMedication(Long droneId) {
         Optional<DroneEntity> droneEntity = droneRepository.findById(droneId);
         if (droneEntity.isPresent())
@@ -112,6 +125,7 @@ public class DroneServiceImpl implements DroneService {
     }
 
     @Override
+    @Transactional
     public List<DroneDto> getDronesWithoutMedication() {
         List<DroneEntity> droneEntityList = droneRepository.findDronesWithoutMedication().orElse(null);
         if (droneEntityList != null)
@@ -119,31 +133,8 @@ public class DroneServiceImpl implements DroneService {
         return null;
     }
 
-
-
-    private void checkNumberOfDrones(){
-        if (droneRepository.count() == MAX_VALUE_OF_DRONES_IN_SERVICE)
-            throw new DroneCountLimitException(LIMIT_COUNT_DRONE_MESSAGE + MAX_VALUE_OF_DRONES_IN_SERVICE);
-    }
-
-    private boolean isAbleToLoad(DroneEntity droneEntity, MedicationEntity medicationEntity){
-        int droneLoadedMedicationWeight = droneLoadedMedicationWeight(droneEntity);
-        int loadingMedicationWeight = medicationEntity.getWeight();
-
-        if ((droneLoadedMedicationWeight + loadingMedicationWeight) <= LOAD_WEIGHT_LIMIT)
-            return true;
-        return false;
-    }
-
-    private boolean isAbleToLoad(DroneEntity droneEntity){
-        int droneLoadedMedicationWeight = droneLoadedMedicationWeight(droneEntity);
-        if (droneLoadedMedicationWeight < LOAD_WEIGHT_LIMIT)
-            return true;
-        return false;
-    }
-
-    private int droneLoadedMedicationWeight(DroneEntity droneEntity){
-        return droneEntity.getMedicationEntities().stream()
-                .mapToInt(m -> m.getWeight()).sum();
+    private void changeDroneState(DroneEntity droneEntity, DroneState droneState){
+        StateEntity stateEntity = stateService.getStateIdByName(droneState.toString());
+        droneEntity.setState(stateEntity);
     }
 }

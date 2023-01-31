@@ -3,7 +3,8 @@ create table model
     id    bigserial
         constraint model_pkey
             primary key,
-    name varchar(255) unique
+    name varchar(255) unique,
+    weight_limit integer not null
 );
 
 alter table model

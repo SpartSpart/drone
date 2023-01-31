@@ -7,6 +7,7 @@ import com.spart.drone.repository.ModelRepository;
 import com.spart.drone.service.ModelService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -20,16 +21,22 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+    @Transactional
     public Long saveModel(ModelDto modelDto){
         ModelEntity modelEntity = new ModelEntity();
         modelEntity.setName(modelDto.getName());
         return modelRepository.save(modelEntity).getId();
-
     }
 
     @Override
-    public ModelEntity getModelIdByName(String name) throws NoSuchElementInDatabaseException {
+    @Transactional
+    public ModelEntity getModelIdByName(String name){
         return Optional.ofNullable(modelRepository.findByName(name)).get().orElseThrow(()-> new NoSuchElementInDatabaseException(ModelEntity.class.getName()));
     }
 
+    @Override
+    @Transactional
+    public ModelEntity getModelById(Long modelId) {
+        return Optional.ofNullable(modelRepository.findById(modelId)).get().orElseThrow(()-> new NoSuchElementInDatabaseException(ModelEntity.class.getName()));
+    }
 }

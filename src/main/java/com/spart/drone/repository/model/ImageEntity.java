@@ -2,6 +2,7 @@ package com.spart.drone.repository.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -16,6 +17,8 @@ public class ImageEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Lob
+    @Type(type="org.hibernate.type.BinaryType")
     @Column(name = "image")
     private byte[] image;
 }

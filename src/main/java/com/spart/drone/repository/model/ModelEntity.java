@@ -16,6 +16,9 @@ public class ModelEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name",unique = true)
+    @Column(name = "name",unique = true, nullable = false)
     private String name;
+
+    @Column(name = "weight_limit", nullable = false)
+    private Integer weightLimit;
 }
