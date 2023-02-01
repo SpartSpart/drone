@@ -1,5 +1,6 @@
 package com.spart.drone.service;
 
+import com.spart.drone.controller.dto.DroneUpdateBatteryCapacityDto;
 import com.spart.drone.controller.dto.MedicationDto;
 import com.spart.drone.controller.dto.DroneDto;
 import com.spart.drone.service.status.Response;
@@ -25,5 +26,5 @@ public interface DroneService {
 
     DroneDto getDroneById(Long droneId);
 
-    Long setBatteryLevel(DroneDto droneDto);
+    Long setBatteryLevel(DroneUpdateBatteryCapacityDto droneDto);
 }

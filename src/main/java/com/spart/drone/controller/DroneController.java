@@ -1,5 +1,6 @@
 package com.spart.drone.controller;
 
+import com.spart.drone.controller.dto.DroneUpdateBatteryCapacityDto;
 import com.spart.drone.controller.dto.MedicationDto;
 import com.spart.drone.controller.dto.DroneDto;
 import com.spart.drone.service.DroneService;
@@ -65,7 +66,7 @@ public class DroneController {
     }
 
     @PutMapping()
-    public Long setBatteryLevel(@RequestBody DroneDto droneDto){
-        return droneService.setBatteryLevel(droneDto);
+    public Long setBatteryLevel(@RequestBody DroneUpdateBatteryCapacityDto droneUpdateBatteryCapacityDto){
+        return droneService.setBatteryLevel(droneUpdateBatteryCapacityDto);
     }
  }

@@ -1,5 +1,6 @@
 package com.spart.drone.service.impl;
 
+import com.spart.drone.controller.dto.DroneUpdateBatteryCapacityDto;
 import com.spart.drone.controller.dto.MedicationDto;
 import com.spart.drone.controller.dto.DroneDto;
 import com.spart.drone.exception.NoSuchElementInDatabaseException;
@@ -166,10 +167,10 @@ public class DroneServiceImpl implements DroneService {
 
     @Override
     @Transactional
-    public Long setBatteryLevel(DroneDto droneDto) {
-        DroneEntity droneEntity = droneRepository.findById(droneDto.getId())
+    public Long setBatteryLevel(DroneUpdateBatteryCapacityDto droneUpdateBatteryCapacityDto) {
+        DroneEntity droneEntity = droneRepository.findById(droneUpdateBatteryCapacityDto.getId())
                 .orElseThrow(() -> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
-        droneEntity.setBatteryСapacity(droneDto.getBatteryСapacity());
+        droneEntity.setBatteryСapacity(droneUpdateBatteryCapacityDto.getBatteryСapacity());
         return droneRepository.save(droneEntity).getId();
     }
 
