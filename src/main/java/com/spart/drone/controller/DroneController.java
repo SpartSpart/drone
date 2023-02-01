@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * Drone controller allows manage drones
- */
 @RestController
 @RequestMapping("/api/v1/drone")
 public class DroneController {
@@ -23,11 +20,6 @@ public class DroneController {
         this.droneService = droneService;
     }
 
-    /**
-     * Method for registration drone in service
-     * @param droneDto
-     * @return
-     */
     @PostMapping
     public Long addDrone(@RequestBody @Valid DroneDto droneDto){
         return droneService.addDrone(droneDto);

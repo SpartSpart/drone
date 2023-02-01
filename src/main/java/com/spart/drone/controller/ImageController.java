@@ -4,9 +4,6 @@ import com.spart.drone.service.ImageService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * Model controller allows working with drone models
- */
 @RestController
 @RequestMapping("/api/v1/image")
 public class ImageController {

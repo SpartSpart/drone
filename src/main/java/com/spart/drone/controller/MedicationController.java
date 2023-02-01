@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * Drone controller allows manage medications
- */
 @RestController
 @RequestMapping("/api/v1/medication")
 public class MedicationController {
@@ -22,12 +19,6 @@ public class MedicationController {
         this.medicationMapper = medicationMapper;
     }
 
-    /**
-     * Method for add medication to service
-     *
-     * @param medicationDto
-     * @return
-     */
     @PostMapping
     public Long addMedication(@RequestBody @Valid MedicationDto medicationDto) {
         return medicationService.add(medicationDto);

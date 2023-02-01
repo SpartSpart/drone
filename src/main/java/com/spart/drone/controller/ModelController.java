@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * Model controller allows working with drone models
- */
 @RestController
 @RequestMapping("/api/v1/model")
 public class ModelController {
@@ -19,10 +16,6 @@ public class ModelController {
         this.modelService = modelService;
     }
 
-    /**
-     * @param modelDto
-     * @return id model
-     */
     @PostMapping()
     public Long saveModel(@RequestBody @Valid ModelDto modelDto) {
         return modelService.saveModel(modelDto);

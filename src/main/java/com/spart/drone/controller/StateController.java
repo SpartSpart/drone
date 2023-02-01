@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * State controller allows working with drone state
- */
 @RestController
 @RequestMapping("/api/v1/state")
 public class StateController {

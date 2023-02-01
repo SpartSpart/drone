@@ -38,14 +38,6 @@ public class DroneServiceImpl implements DroneService {
     private final DroneMapper droneMapper;
     private final DroneValidator droneValidator;
 
-    /**
-     * @param droneRepository
-     * @param modelService
-     * @param stateService
-     * @param medicationService
-     * @param droneMapper
-     * @param droneValidator
-     **/
     public DroneServiceImpl(DroneRepository droneRepository,
                             ModelService modelService,
                             StateService stateService,
