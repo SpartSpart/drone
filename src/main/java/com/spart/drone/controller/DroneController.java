@@ -29,7 +29,7 @@ public class DroneController {
      */
     @PostMapping
     public Long addDrone(@RequestBody @Valid DroneDto droneDto){
-        return droneService.registerDrone(droneDto);
+        return droneService.addDrone(droneDto);
     }
 
     @PostMapping("/load")
@@ -44,7 +44,7 @@ public class DroneController {
         return droneService.getAllDrones(availableOnly);
     }
 
-    @GetMapping("{droneId}")
+    @GetMapping("medication/{droneId}")
     public List<MedicationDto> getDroneMedication(@PathVariable Long droneId){
         return droneService.getDroneMedication(droneId);
     }
@@ -52,5 +52,15 @@ public class DroneController {
     @GetMapping("/empty")
     public List<DroneDto> getDronesWithoutMedication(){
         return droneService.getDronesWithoutMedication();
+    }
+
+    @GetMapping("/battery/{droneId}")
+    public Integer getDroneBatteryLevel(@PathVariable Long droneId){
+        return droneService.getDronesBatteryLevel(droneId);
+    }
+
+    @GetMapping("{droneId}")
+    public DroneDto getDroneById(@PathVariable Long droneId){
+        return droneService.getDroneById(droneId);
     }
  }

@@ -2,11 +2,10 @@ package com.spart.drone.controller;
 
 import com.spart.drone.controller.dto.ModelDto;
 import com.spart.drone.service.ModelService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Model controller allows working with drone models
@@ -21,12 +20,16 @@ public class ModelController {
     }
 
     /**
-     *
      * @param modelDto
      * @return id model
      */
     @PostMapping()
-    public ResponseEntity<Long> saveModel(@RequestBody ModelDto modelDto){
-        return ResponseEntity.ok().body(modelService.saveModel(modelDto));
+    public Long saveModel(@RequestBody @Valid ModelDto modelDto) {
+        return modelService.saveModel(modelDto);
+    }
+
+    @GetMapping
+    public List<ModelDto> getAllModels() {
+        return modelService.getAllModel();
     }
 }

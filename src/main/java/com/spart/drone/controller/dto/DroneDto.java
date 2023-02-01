@@ -16,25 +16,20 @@ public class DroneDto {
 
     private Long id;
 
-    @Size(max = 100)
     @NotNull
     @NotEmpty
     private String name;
 
     @NotNull
     @NotEmpty
+    @Size(max = 100)
     private String serialNumber;
 
     @NotNull
     private ModelDto model;
 
-    @Max(500)
-    @Min(1)
-    @NotNull
-    private int weight;
-
     @Max(100)
-    @Min(1)
+    @Min(0)
     @NotNull
     private int batteryСapacity;
 

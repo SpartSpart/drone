@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -21,5 +22,6 @@ public class ModelDto {
     private String name;
 
     @NotNull
+    @Max(500)
     private Integer weightLimit;
 }

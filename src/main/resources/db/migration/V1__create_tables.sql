@@ -29,7 +29,6 @@ create table drone
     name             varchar(255),
     battery_capacity integer,
     serial_number    varchar(100),
-    weight           integer,
     model            bigint not null
         constraint fk_drone_to_model
             references model,
@@ -46,7 +45,7 @@ create table image
     id    bigserial
         constraint image_pkey
             primary key,
-    name bytea
+    image bytea
 );
 
 alter table image

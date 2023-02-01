@@ -28,9 +28,6 @@ public class DroneEntity {
     @JoinColumn(name = "model", nullable = false)
     private ModelEntity model;
 
-    @Column(name = "weight")
-    private int weight;
-
     @Column(name = "battery_capacity")
     private int batteryСapacity;
 

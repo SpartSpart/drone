@@ -18,7 +18,6 @@ import com.spart.drone.service.status.Code;
 import com.spart.drone.service.status.Response;
 import com.spart.drone.service.validator.DroneValidator;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.context.annotation.Primary;
 
 import org.springframework.stereotype.Service;
@@ -62,7 +61,7 @@ public class DroneServiceImpl implements DroneService {
 
     @Override
     @Transactional
-    public Long registerDrone(DroneDto droneDto) {
+    public Long addDrone(DroneDto droneDto) {
 
         DroneEntity droneEntity = droneMapper.toModel(droneDto); //modelMapper.map(droneDto, DroneEntity.class);
 
@@ -74,7 +73,9 @@ public class DroneServiceImpl implements DroneService {
         droneEntity.setModel(modelEntity);
         droneEntity.setState(stateEntity);
 
-        return droneRepository.save(droneEntity).getId();
+        droneEntity = droneRepository.save(droneEntity);
+        log.info(String.format("Drone %s has been added",droneEntity.getName()));
+        return droneEntity.getId();
     }
 
     @Override
@@ -92,6 +93,7 @@ public class DroneServiceImpl implements DroneService {
             droneRepository.save(droneEntity);
 
             changeDroneState(droneEntity, DroneState.LOADED);
+            log.info(String.format("Medication %s loaded to drone %s",medicationEntity.getName(),droneEntity.getName()));
         }
         return response;
     }
@@ -131,6 +133,32 @@ public class DroneServiceImpl implements DroneService {
         if (droneEntityList != null)
             return droneMapper.toListDto(droneEntityList);
         return null;
+    }
+
+    @Override
+    public Integer getDronesBatteryLevel(Long droneId) {
+        DroneEntity droneEntity = Optional.ofNullable(droneRepository.findById(droneId))
+                .get()
+                .orElseThrow(()-> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
+        return droneEntity.getBatteryСapacity();
+    }
+
+    @Override
+    public void getBatteryLevelStatistics() {
+        List<DroneEntity> droneEntityList = droneRepository.findAll();
+        log.info("Battery level Statistics:");
+        log.info("==========================");
+        droneEntityList.stream().forEach(droneEntity -> {
+            log.info("{}, id={}, batteryLevel={}",droneEntity.getName(),droneEntity.getId(),droneEntity.getBatteryСapacity());
+        });
+        log.info("==========================");
+    }
+
+    @Override
+    public DroneDto getDroneById(Long droneId) {
+        DroneEntity droneEntity = droneRepository.findById(droneId)
+                .orElseThrow(()->new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
+        return droneMapper.toDto(droneEntity);
     }
 
     private void changeDroneState(DroneEntity droneEntity, DroneState droneState){

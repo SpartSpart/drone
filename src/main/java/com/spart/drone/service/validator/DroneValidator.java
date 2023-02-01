@@ -9,10 +9,12 @@ import com.spart.drone.service.ModelService;
 import com.spart.drone.service.helper.DroneState;
 import com.spart.drone.service.status.Code;
 import com.spart.drone.service.status.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class DroneValidator {
 
     @Value("${drone.max.count}")
@@ -20,6 +22,8 @@ public class DroneValidator {
 
     @Value("${drone.battery.capacity.limit}")
     private String BATTERY_CAPACITY_LIMIT;
+
+    private final String VALIDATION_FAILED = "Validation is failed: ";
 
     private final DroneRepository droneRepository;
     private final ModelService modelService;
@@ -31,8 +35,10 @@ public class DroneValidator {
     }
 
     public void checkNumberOfDrones(){
-        if (droneRepository.count() == Integer.parseInt(DRONE_MAX_COUNT))
+        if (droneRepository.count() == Integer.parseInt(DRONE_MAX_COUNT)) {
+            log.warn(VALIDATION_FAILED + ValidationMessages.LIMIT_NUMBER_DRONE_MESSAGE + DRONE_MAX_COUNT);
             throw new DroneCountLimitException(ValidationMessages.LIMIT_NUMBER_DRONE_MESSAGE + DRONE_MAX_COUNT);
+        }
     }
 
     public boolean isDroneValidForLoading(DroneEntity droneEntity){
@@ -54,8 +60,11 @@ public class DroneValidator {
 
         if(response.getStatus().getErrors() == null)
             response.getStatus().setCode(Code.ok);
-        else
+        else {
             response.getStatus().setCode(Code.error);
+            for (String error:response.getStatus().getErrors())
+                log.warn(VALIDATION_FAILED + error);
+        }
 
         return response;
     }

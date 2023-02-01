@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface DroneService {
-    Long registerDrone(DroneDto droneDto);
+    Long addDrone(DroneDto droneDto);
 
     Response loadMedication(Long droneId, Long medicationId) ;
 
@@ -18,4 +18,10 @@ public interface DroneService {
     List<MedicationDto> getDroneMedication(Long droneId);
 
     List<DroneDto> getDronesWithoutMedication();
+
+    Integer getDronesBatteryLevel(Long droneId);
+
+    void getBatteryLevelStatistics();
+
+    DroneDto getDroneById(Long droneId);
 }

@@ -6,6 +6,7 @@ import com.spart.drone.repository.MedicationRepository;
 import com.spart.drone.repository.mapper.MedicationMapper;
 import com.spart.drone.repository.model.MedicationEntity;
 import com.spart.drone.service.MedicationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @Primary
+@Slf4j
 public class MedicationServiceImpl implements MedicationService {
     private final MedicationRepository medicationRepository;
     private final MedicationMapper medicationMapper;
@@ -28,8 +30,10 @@ public class MedicationServiceImpl implements MedicationService {
     @Override
     @Transactional
     public Long add(MedicationDto medicationDto) {
-        MedicationEntity medicationEntity = medicationMapper.toModel(medicationDto);
-        return medicationRepository.save(medicationEntity).getId();
+        MedicationEntity medicationEntity = medicationRepository.save(medicationMapper.toModel(medicationDto));
+        log.info(String.format("Medication %s added",medicationEntity.getName()));
+
+        return medicationEntity.getId();
     }
 
     @Override

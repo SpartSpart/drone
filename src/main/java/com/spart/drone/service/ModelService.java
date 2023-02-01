@@ -5,6 +5,8 @@ import com.spart.drone.exception.NoSuchElementInDatabaseException;
 import com.spart.drone.repository.model.ModelEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface ModelService {
     Long saveModel(ModelDto modelDto);
@@ -13,4 +15,5 @@ public interface ModelService {
 
     ModelEntity getModelById(Long id);
 
+    List<ModelDto> getAllModel();
 }
