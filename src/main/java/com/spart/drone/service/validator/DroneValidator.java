@@ -84,7 +84,7 @@ public class DroneValidator {
         return true;
     }
 
-    private boolean isValidToLoadByBatteryLevel(DroneEntity droneEntity) {
+    public boolean isValidToLoadByBatteryLevel(DroneEntity droneEntity) {
         if (droneEntity.getBatteryСapacity() >= Integer.parseInt(BATTERY_CAPACITY_LIMIT))
             return true;
         return false;

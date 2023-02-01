@@ -24,4 +24,6 @@ public interface DroneService {
     void getBatteryLevelStatistics();
 
     DroneDto getDroneById(Long droneId);
+
+    Long setBatteryLevel(DroneDto droneDto);
 }

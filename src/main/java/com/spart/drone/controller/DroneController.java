@@ -63,4 +63,9 @@ public class DroneController {
     public DroneDto getDroneById(@PathVariable Long droneId){
         return droneService.getDroneById(droneId);
     }
+
+    @PutMapping()
+    public Long setBatteryLevel(@RequestBody DroneDto droneDto){
+        return droneService.setBatteryLevel(droneDto);
+    }
  }

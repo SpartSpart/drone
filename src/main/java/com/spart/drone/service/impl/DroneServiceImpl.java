@@ -74,26 +74,26 @@ public class DroneServiceImpl implements DroneService {
         droneEntity.setState(stateEntity);
 
         droneEntity = droneRepository.save(droneEntity);
-        log.info(String.format("Drone %s has been added",droneEntity.getName()));
+        log.info(String.format("Drone %s has been added", droneEntity.getName()));
         return droneEntity.getId();
     }
 
     @Override
     @Transactional
-    public Response loadMedication(Long droneId, Long medicationId)  {
+    public Response loadMedication(Long droneId, Long medicationId) {
         MedicationEntity medicationEntity = medicationService.getMedicationById(medicationId);
-        DroneEntity droneEntity = droneRepository.getDroneById(droneId).orElseThrow(()->new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
+        DroneEntity droneEntity = droneRepository.getDroneById(droneId).orElseThrow(() -> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
 
-        Response response = droneValidator.isDroneValidForLoadingByMedication(droneEntity,medicationEntity);
+        Response response = droneValidator.isDroneValidForLoadingByMedication(droneEntity, medicationEntity);
 
-        if (response.getStatus().getCode().equals(Code.ok)){
+        if (response.getStatus().getCode().equals(Code.ok)) {
             changeDroneState(droneEntity, DroneState.LOADING);
 
             droneEntity.addMedication(medicationEntity);
             droneRepository.save(droneEntity);
 
             changeDroneState(droneEntity, DroneState.LOADED);
-            log.info(String.format("Medication %s loaded to drone %s",medicationEntity.getName(),droneEntity.getName()));
+            log.info(String.format("Medication %s loaded to drone %s", medicationEntity.getName(), droneEntity.getName()));
         }
         return response;
     }
@@ -139,7 +139,7 @@ public class DroneServiceImpl implements DroneService {
     public Integer getDronesBatteryLevel(Long droneId) {
         DroneEntity droneEntity = Optional.ofNullable(droneRepository.findById(droneId))
                 .get()
-                .orElseThrow(()-> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
+                .orElseThrow(() -> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
         return droneEntity.getBatteryСapacity();
     }
 
@@ -149,7 +149,10 @@ public class DroneServiceImpl implements DroneService {
         log.info("Battery level Statistics:");
         log.info("==========================");
         droneEntityList.stream().forEach(droneEntity -> {
-            log.info("{}, id={}, batteryLevel={}",droneEntity.getName(),droneEntity.getId(),droneEntity.getBatteryСapacity());
+            if (isValidToLoadByBatteryLevel(droneEntity))
+                log.info("{}, id={}, batteryLevel={}", droneEntity.getName(), droneEntity.getId(), droneEntity.getBatteryСapacity());
+            else
+                log.warn("{}, id={}, batteryLevel={}", droneEntity.getName(), droneEntity.getId(), droneEntity.getBatteryСapacity());
         });
         log.info("==========================");
     }
@@ -157,12 +160,25 @@ public class DroneServiceImpl implements DroneService {
     @Override
     public DroneDto getDroneById(Long droneId) {
         DroneEntity droneEntity = droneRepository.findById(droneId)
-                .orElseThrow(()->new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
+                .orElseThrow(() -> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
         return droneMapper.toDto(droneEntity);
     }
 
-    private void changeDroneState(DroneEntity droneEntity, DroneState droneState){
+    @Override
+    @Transactional
+    public Long setBatteryLevel(DroneDto droneDto) {
+        DroneEntity droneEntity = droneRepository.findById(droneDto.getId())
+                .orElseThrow(() -> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
+        droneEntity.setBatteryСapacity(droneDto.getBatteryСapacity());
+        return droneRepository.save(droneEntity).getId();
+    }
+
+    private void changeDroneState(DroneEntity droneEntity, DroneState droneState) {
         StateEntity stateEntity = stateService.getStateIdByName(droneState.toString());
         droneEntity.setState(stateEntity);
+    }
+
+    private boolean isValidToLoadByBatteryLevel(DroneEntity droneEntity) {
+        return droneValidator.isValidToLoadByBatteryLevel(droneEntity);
     }
 }
