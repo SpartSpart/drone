@@ -6,6 +6,7 @@ import com.spart.drone.repository.ImageRepository;
 import com.spart.drone.repository.mapper.ImageMapper;
 import com.spart.drone.repository.model.ImageEntity;
 import com.spart.drone.service.ImageService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -17,14 +18,10 @@ import java.io.IOException;
 @Service
 @Primary
 @Slf4j
+@RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
     private final ImageMapper imageMapper;
-
-    public ImageServiceImpl(ImageRepository imageRepository, ImageMapper imageMapper) {
-        this.imageRepository = imageRepository;
-        this.imageMapper = imageMapper;
-    }
 
     @Override
     @Transactional

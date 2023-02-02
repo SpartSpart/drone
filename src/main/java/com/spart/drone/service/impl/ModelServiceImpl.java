@@ -7,6 +7,7 @@ import com.spart.drone.repository.mapper.ModelDroneMapper;
 import com.spart.drone.repository.model.ModelEntity;
 import com.spart.drone.repository.ModelRepository;
 import com.spart.drone.service.ModelService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -18,14 +19,10 @@ import java.util.Optional;
 @Service
 @Primary
 @Slf4j
+@RequiredArgsConstructor
 public class ModelServiceImpl implements ModelService {
     private final ModelRepository modelRepository;
     private final ModelDroneMapper modelDroneMapper;
-
-    public ModelServiceImpl(ModelRepository modelRepository, ModelDroneMapper modelDroneMapper) {
-        this.modelRepository = modelRepository;
-        this.modelDroneMapper = modelDroneMapper;
-    }
 
     @Override
     @Transactional

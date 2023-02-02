@@ -20,6 +20,7 @@ import com.spart.drone.service.helper.DroneState;
 import com.spart.drone.service.status.Code;
 import com.spart.drone.service.status.Response;
 import com.spart.drone.service.validator.DroneValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 @Primary
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class DroneServiceImpl implements DroneService {
     private final DroneRepository droneRepository;
     private final ModelService modelService;
@@ -40,21 +42,6 @@ public class DroneServiceImpl implements DroneService {
     private final DroneMapper droneMapper;
     private final DroneValidator droneValidator;
     private final StateMapper stateMapper;
-
-    public DroneServiceImpl(DroneRepository droneRepository,
-                            ModelService modelService,
-                            StateService stateService,
-                            MedicationService medicationService,
-                            DroneMapper droneMapper,
-                            DroneValidator droneValidator, StateMapper stateMapper) {
-        this.droneRepository = droneRepository;
-        this.modelService = modelService;
-        this.stateService = stateService;
-        this.medicationService = medicationService;
-        this.droneMapper = droneMapper;
-        this.droneValidator = droneValidator;
-        this.stateMapper = stateMapper;
-    }
 
     @Override
     @Transactional
@@ -154,6 +141,7 @@ public class DroneServiceImpl implements DroneService {
     }
 
     @Override
+    @Transactional
     public DroneDto getDroneById(Long droneId) {
         DroneEntity droneEntity = droneRepository.findById(droneId)
                 .orElseThrow(() -> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
@@ -170,6 +158,7 @@ public class DroneServiceImpl implements DroneService {
     }
 
     @Override
+    @Transactional
     public Long deleteDrone(Long droneId) {
         DroneEntity droneEntity = droneRepository.findById(droneId).orElseThrow(() -> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
         droneRepository.delete(droneEntity);
@@ -177,6 +166,7 @@ public class DroneServiceImpl implements DroneService {
     }
 
     @Override
+    @Transactional
     public Long deleteMedicationFromDrone(Long droneId) {
         DroneEntity droneEntity = droneRepository.findById(droneId).orElseThrow(() -> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
         droneEntity.setMedicationEntities(null);
@@ -186,6 +176,7 @@ public class DroneServiceImpl implements DroneService {
     }
 
     @Override
+    @Transactional
     public Long setState(DroneUpdateStateDto droneUpdateStateDto) {
         DroneEntity droneEntity = droneRepository.findById(droneUpdateStateDto.getId())
                 .orElseThrow(() -> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));

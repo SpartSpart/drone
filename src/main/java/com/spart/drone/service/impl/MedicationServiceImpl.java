@@ -6,6 +6,7 @@ import com.spart.drone.repository.MedicationRepository;
 import com.spart.drone.repository.mapper.MedicationMapper;
 import com.spart.drone.repository.model.MedicationEntity;
 import com.spart.drone.service.MedicationService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -17,15 +18,11 @@ import java.util.Optional;
 @Service
 @Primary
 @Slf4j
+@RequiredArgsConstructor
 public class MedicationServiceImpl implements MedicationService {
     private final MedicationRepository medicationRepository;
     private final MedicationMapper medicationMapper;
 
-
-    public MedicationServiceImpl(MedicationRepository medicationRepository, MedicationMapper medicationMapper) {
-        this.medicationRepository = medicationRepository;
-        this.medicationMapper = medicationMapper;
-    }
 
     @Override
     @Transactional

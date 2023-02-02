@@ -7,6 +7,7 @@ import com.spart.drone.repository.StateRepository;
 import com.spart.drone.repository.mapper.StateMapper;
 import com.spart.drone.repository.model.StateEntity;
 import com.spart.drone.service.StateService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -18,14 +19,10 @@ import java.util.Optional;
 @Service
 @Primary
 @Slf4j
+@RequiredArgsConstructor
 public class StateServiceImpl implements StateService {
     private final StateRepository stateRepository;
     private final StateMapper stateMapper;
-
-    public StateServiceImpl(StateRepository stateRepository, StateMapper stateMapper) {
-        this.stateRepository = stateRepository;
-        this.stateMapper = stateMapper;
-    }
 
     @Override
     @Transactional

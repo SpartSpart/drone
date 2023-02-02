@@ -6,6 +6,7 @@ import com.spart.drone.controller.dto.drone.DroneDto;
 import com.spart.drone.controller.dto.drone.DroneUpdateStateDto;
 import com.spart.drone.service.DroneService;
 import com.spart.drone.service.status.Response;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping()
+@RequiredArgsConstructor
 public class DroneController {
 
     private static final String DRONE_BASE_PATH = ControllerConfiguration.APPLICATION_V1_PATH + "/drone";
@@ -23,10 +25,6 @@ public class DroneController {
     private static final String GET_EMPTY_DRONES = DRONE_BASE_PATH + "/empty";
 
     private final DroneService droneService;
-
-    public DroneController(DroneService droneService) {
-        this.droneService = droneService;
-    }
 
     @PostMapping(DRONE_BASE_PATH)
     public Long addDrone(@RequestBody @Valid DroneDto droneDto){
