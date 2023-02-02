@@ -6,7 +6,7 @@ public enum DroneState {
     LOADED("LOADED"),
     DELIVERING("DELIVERING"),
     DELIVERED("DELIVERED"),
-    RETURNING("DELIVERED");
+    RETURNING("RETURNING");
 
     private final String state;
 

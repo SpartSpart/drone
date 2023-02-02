@@ -1,22 +1,21 @@
-package com.spart.drone.controller.dto;
+package com.spart.drone.controller.dto.drone;
 
+import com.spart.drone.controller.dto.StateDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class DroneUpdateBatteryCapacityDto {
+public class DroneUpdateStateDto {
 
     private Long id;
 
-    @Max(100)
-    @Min(0)
     @NotNull
-    private int batteryСapacity;
+    private StateDto state;
 }

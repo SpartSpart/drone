@@ -8,8 +8,11 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/medication")
+@RequestMapping()
 public class MedicationController {
+
+    private static final String MEDICATION_BASE_PATH = ControllerConfiguration.APPLICATION_V1_PATH + "/medication";
+
 
     private final MedicationService medicationService;
     private final MedicationMapper medicationMapper;
@@ -19,17 +22,17 @@ public class MedicationController {
         this.medicationMapper = medicationMapper;
     }
 
-    @PostMapping
+    @PostMapping(MEDICATION_BASE_PATH)
     public Long addMedication(@RequestBody @Valid MedicationDto medicationDto) {
         return medicationService.add(medicationDto);
     }
 
-    @GetMapping
+    @GetMapping(MEDICATION_BASE_PATH)
     public List<MedicationDto> getAllMedication() {
         return medicationService.getAllMedication();
     }
 
-    @GetMapping("{medicationId}")
+    @GetMapping(MEDICATION_BASE_PATH + "/{medicationId}")
     public MedicationDto getMedicationById(@PathVariable Long medicationId) {
         return medicationMapper.toDto(medicationService.getMedicationById(medicationId));
     }

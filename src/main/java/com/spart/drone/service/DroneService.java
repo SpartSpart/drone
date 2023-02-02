@@ -1,8 +1,9 @@
 package com.spart.drone.service;
 
-import com.spart.drone.controller.dto.DroneUpdateBatteryCapacityDto;
+import com.spart.drone.controller.dto.drone.DroneUpdateBatteryCapacityDto;
 import com.spart.drone.controller.dto.MedicationDto;
-import com.spart.drone.controller.dto.DroneDto;
+import com.spart.drone.controller.dto.drone.DroneDto;
+import com.spart.drone.controller.dto.drone.DroneUpdateStateDto;
 import com.spart.drone.service.status.Response;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +28,10 @@ public interface DroneService {
     DroneDto getDroneById(Long droneId);
 
     Long setBatteryLevel(DroneUpdateBatteryCapacityDto droneDto);
+
+    Long deleteDrone(Long droneId);
+
+    Long deleteMedicationFromDrone(Long droneId);
+
+    Long setState(DroneUpdateStateDto droneUpdateStateDto);
 }

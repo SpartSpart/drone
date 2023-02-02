@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface StateService {
-    StateEntity getStateIdByName(String name) throws NoSuchElementInDatabaseException;
+    StateEntity getStateByName(String name) throws NoSuchElementInDatabaseException;
 
     Long addState(StateDto stateDto);
 

@@ -29,7 +29,7 @@ public class StateServiceImpl implements StateService {
 
     @Override
     @Transactional
-    public StateEntity getStateIdByName(String name) {
+    public StateEntity getStateByName(String name) {
         return Optional.ofNullable(stateRepository.findByName(name)).get().orElseThrow(() -> new NoSuchElementInDatabaseException(StateEntity.class.getName()));
     }
 

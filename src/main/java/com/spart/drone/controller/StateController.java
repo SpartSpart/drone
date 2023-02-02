@@ -8,20 +8,23 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/state")
+@RequestMapping()
 public class StateController {
+
+    private static final String STATE_BASE_PATH = ControllerConfiguration.APPLICATION_V1_PATH + "/state";
+
     private final StateService stateService;
 
     public StateController(StateService stateService) {
         this.stateService = stateService;
     }
 
-    @PostMapping
+    @PostMapping(STATE_BASE_PATH)
     public Long addState(@RequestBody @Valid StateDto stateDto){
         return stateService.addState(stateDto);
     }
 
-    @GetMapping
+    @GetMapping(STATE_BASE_PATH)
     public List<StateDto> getAllStates(){
         return stateService.getAllStates();
     }

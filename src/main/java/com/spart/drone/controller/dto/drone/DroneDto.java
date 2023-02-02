@@ -1,5 +1,8 @@
-package com.spart.drone.controller.dto;
+package com.spart.drone.controller.dto.drone;
 
+import com.spart.drone.controller.dto.MedicationDto;
+import com.spart.drone.controller.dto.ModelDto;
+import com.spart.drone.controller.dto.StateDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

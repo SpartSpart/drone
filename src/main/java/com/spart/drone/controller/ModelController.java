@@ -8,20 +8,23 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/model")
+@RequestMapping()
 public class ModelController {
+
+    private static final String MODEL_BASE_PATH = ControllerConfiguration.APPLICATION_V1_PATH + "/model";
+
     private final ModelService modelService;
 
     public ModelController(ModelService modelService) {
         this.modelService = modelService;
     }
 
-    @PostMapping()
+    @PostMapping(MODEL_BASE_PATH)
     public Long saveModel(@RequestBody @Valid ModelDto modelDto) {
         return modelService.saveModel(modelDto);
     }
 
-    @GetMapping
+    @GetMapping(MODEL_BASE_PATH)
     public List<ModelDto> getAllModels() {
         return modelService.getAllModel();
     }

@@ -1,11 +1,13 @@
 package com.spart.drone.service.impl;
 
-import com.spart.drone.controller.dto.DroneUpdateBatteryCapacityDto;
+import com.spart.drone.controller.dto.drone.DroneUpdateBatteryCapacityDto;
 import com.spart.drone.controller.dto.MedicationDto;
-import com.spart.drone.controller.dto.DroneDto;
+import com.spart.drone.controller.dto.drone.DroneDto;
+import com.spart.drone.controller.dto.drone.DroneUpdateStateDto;
 import com.spart.drone.exception.NoSuchElementInDatabaseException;
 import com.spart.drone.repository.DroneRepository;
 import com.spart.drone.repository.mapper.DroneMapper;
+import com.spart.drone.repository.mapper.StateMapper;
 import com.spart.drone.repository.model.DroneEntity;
 import com.spart.drone.repository.model.MedicationEntity;
 import com.spart.drone.repository.model.ModelEntity;
@@ -37,19 +39,21 @@ public class DroneServiceImpl implements DroneService {
     private final MedicationService medicationService;
     private final DroneMapper droneMapper;
     private final DroneValidator droneValidator;
+    private final StateMapper stateMapper;
 
     public DroneServiceImpl(DroneRepository droneRepository,
                             ModelService modelService,
                             StateService stateService,
                             MedicationService medicationService,
                             DroneMapper droneMapper,
-                            DroneValidator droneValidator) {
+                            DroneValidator droneValidator, StateMapper stateMapper) {
         this.droneRepository = droneRepository;
         this.modelService = modelService;
         this.stateService = stateService;
         this.medicationService = medicationService;
         this.droneMapper = droneMapper;
         this.droneValidator = droneValidator;
+        this.stateMapper = stateMapper;
     }
 
     @Override
@@ -61,7 +65,7 @@ public class DroneServiceImpl implements DroneService {
         droneValidator.checkNumberOfDrones();
 
         ModelEntity modelEntity = modelService.getModelIdByName(droneDto.getModel().getName());
-        StateEntity stateEntity = stateService.getStateIdByName(droneDto.getState().getName());
+        StateEntity stateEntity = stateService.getStateByName(droneDto.getState().getName());
 
         droneEntity.setModel(modelEntity);
         droneEntity.setState(stateEntity);
@@ -115,8 +119,7 @@ public class DroneServiceImpl implements DroneService {
         Optional<DroneEntity> droneEntity = droneRepository.findById(droneId);
         if (droneEntity.isPresent())
             return droneMapper.toDto(droneEntity.get()).getMedicationDto();
-
-        return null;
+        else throw new NoSuchElementInDatabaseException(DroneEntity.class.getName());
     }
 
     @Override
@@ -166,8 +169,32 @@ public class DroneServiceImpl implements DroneService {
         return droneRepository.save(droneEntity).getId();
     }
 
+    @Override
+    public Long deleteDrone(Long droneId) {
+        DroneEntity droneEntity = droneRepository.findById(droneId).orElseThrow(() -> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
+        droneRepository.delete(droneEntity);
+        return droneId;
+    }
+
+    @Override
+    public Long deleteMedicationFromDrone(Long droneId) {
+        DroneEntity droneEntity = droneRepository.findById(droneId).orElseThrow(() -> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
+        droneEntity.setMedicationEntities(null);
+        StateEntity stateEntity = stateService.getStateByName(DroneState.IDLE.toString());
+        droneEntity.setState(stateEntity);
+        return droneRepository.save(droneEntity).getId();
+    }
+
+    @Override
+    public Long setState(DroneUpdateStateDto droneUpdateStateDto) {
+        DroneEntity droneEntity = droneRepository.findById(droneUpdateStateDto.getId())
+                .orElseThrow(() -> new NoSuchElementInDatabaseException(DroneEntity.class.getName()));
+        droneEntity.setState(stateMapper.toModel(droneUpdateStateDto.getState()));
+        return droneRepository.save(droneEntity).getId();
+    }
+
     private void changeDroneState(DroneEntity droneEntity, DroneState droneState) {
-        StateEntity stateEntity = stateService.getStateIdByName(droneState.toString());
+        StateEntity stateEntity = stateService.getStateByName(droneState.toString());
         droneEntity.setState(stateEntity);
     }
 
