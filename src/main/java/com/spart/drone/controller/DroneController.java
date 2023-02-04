@@ -37,7 +37,6 @@ public class DroneController {
             return droneService.loadMedication(droneId, medicationId);
     }
 
-
     @GetMapping(DRONE_BASE_PATH)
     public List<DroneDto> getAllDrones(@RequestParam(name = "availableOnly", required = false, defaultValue = "false") Boolean availableOnly ){
         return droneService.getAllDrones(availableOnly);
@@ -51,11 +50,6 @@ public class DroneController {
     @GetMapping(GET_EMPTY_DRONES)
     public List<DroneDto> getDronesWithoutMedication(){
         return droneService.getDronesWithoutMedication();
-    }
-
-    @GetMapping(DRONE_BATTERY + "/{droneId}")
-    public Integer getDroneBatteryLevel(@PathVariable Long droneId){
-        return droneService.getDronesBatteryLevel(droneId);
     }
 
     @GetMapping(DRONE_BASE_PATH + "/{droneId}")

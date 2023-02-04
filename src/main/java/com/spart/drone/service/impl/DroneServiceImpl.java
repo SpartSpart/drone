@@ -51,7 +51,7 @@ public class DroneServiceImpl implements DroneService {
 
         droneValidator.checkNumberOfDrones();
 
-        ModelEntity modelEntity = modelService.getModelIdByName(droneDto.getModel().getName());
+        ModelEntity modelEntity = modelService.getModelByName(droneDto.getModel().getName());
         StateEntity stateEntity = stateService.getStateByName(droneDto.getState().getName());
 
         droneEntity.setModel(modelEntity);

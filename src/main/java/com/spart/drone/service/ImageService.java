@@ -5,5 +5,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public interface ImageService {
-    Long addWithImage(MultipartFile image);
+    Long addImage(MultipartFile image);
 }

@@ -73,7 +73,7 @@ public class DroneValidator {
         int droneLoadedMedicationWeight = droneLoadedMedicationWeight(droneEntity);
         int loadingMedicationWeight = medicationEntity.getWeight();
 
-        if ((droneLoadedMedicationWeight + loadingMedicationWeight) < getDroneLimitWeight(droneEntity))
+        if ((droneLoadedMedicationWeight + loadingMedicationWeight) <= getDroneLimitWeight(droneEntity))
             return true;
         return false;
     }
@@ -105,5 +105,13 @@ public class DroneValidator {
     private int getDroneLimitWeight(DroneEntity droneEntity){
         ModelEntity modelEntity = modelService.getModelById(droneEntity.getModel().getId());
         return modelEntity.getWeightLimit();
+    }
+
+    public String getBATTERY_CAPACITY_LIMIT() {
+        return BATTERY_CAPACITY_LIMIT;
+    }
+
+    public String getDRONE_MAX_COUNT() {
+        return DRONE_MAX_COUNT;
     }
 }

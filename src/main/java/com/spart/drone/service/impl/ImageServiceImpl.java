@@ -25,7 +25,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
-    public Long addWithImage(MultipartFile image){
+    public Long addImage(MultipartFile image){
         try {
             ImageDto imageDto = new ImageDto();
             byte[] imageByteArray = convertImageToByteArray(image);

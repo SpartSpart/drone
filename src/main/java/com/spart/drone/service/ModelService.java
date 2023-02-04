@@ -11,7 +11,7 @@ import java.util.List;
 public interface ModelService {
     Long saveModel(ModelDto modelDto);
 
-    ModelEntity getModelIdByName(String name) throws NoSuchElementInDatabaseException;
+    ModelEntity getModelByName(String name) throws NoSuchElementInDatabaseException;
 
     ModelEntity getModelById(Long id);
 

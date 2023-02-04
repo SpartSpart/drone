@@ -15,7 +15,7 @@ public class ImageController {
     private final ImageService imageService;
 
     @PostMapping(IMAGE_BASE_PATH)
-    public Long addMedicationWithImage(@RequestBody MultipartFile image) {
-            return imageService.addWithImage(image);
+    public Long addMedicationImage(@RequestBody MultipartFile image) {
+            return imageService.addImage(image);
     }
 }

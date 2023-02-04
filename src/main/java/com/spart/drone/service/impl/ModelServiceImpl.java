@@ -40,7 +40,7 @@ public class ModelServiceImpl implements ModelService {
 
     @Override
     @Transactional
-    public ModelEntity getModelIdByName(String name){
+    public ModelEntity getModelByName(String name){
         return Optional.ofNullable(modelRepository.findByName(name)).get().orElseThrow(()-> new NoSuchElementInDatabaseException(ModelEntity.class.getName()));
     }
 
