@@ -69,4 +69,45 @@ While implementing your solution **please take care of the following requirement
 
 ---
 
+### Launch application instruction:
+
+1. Need to install before launch:
+- Docker
+- Docker-compose
+- Git
+- Maven
+- Bash (optional)
+2. Create project directory and enter into it
+####
+3. Execute command:
+- git clone https://oauth:glpat-ypd13WZnEhZzw3kWredc@gitlab.com/musala-coding-tasks-solutions/spartak-smirnov.git
+####
+4. Enter into spartak-smirnov directory
+####
+5. Execute command:
+- git checkout dev
+####
+6. Execute command:
+- bash start.sh dev DB_USERNAME=drone DB_PASSWORD=drone DB_NAME=postgres DB_PORT=5439 APP_PORT=8081
+####
+7. There will be created two docker containers: drone-db and drone-app, which will be available on port 8081 (make sure that it is free, or mark another port in start line)
+####
+8. Go to browser and enter go to:
+- http://localhost:8081/swagger-ui/#/
+   for check available enpoints
+####
+9. The log file, called drone_docker.log, will be created in current directory
+
+###Current properties for application:
+1. drone.max.count=10 (limit of drones in database)
+####
+2. drone.battery.capacity.limit=25 (limit for loading drone by battery capacity)
+####
+3. drone.quartz.cron=0 0/1 * ? * * * (every 1 minute the scheduler will check the drone battery capacity, and write info to logFile)
+
+All properties you can change in application-docker.properties file, which is located:
+- ../src/main/resources
+
+
+
 :scroll: **END** 
